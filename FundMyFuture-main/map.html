@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Map</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        * {
+            margin:0;
+            padding:0;
+        }
+        #map {
+            height:500px;
+            width:100%;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="main__content">
+        <button class="main__btn"><a href="index.html">Back to Main Page</a></button>
+    </div>
+    <div class="map" id="map"></div>
+    <script type="text/javascript">
+        var map;
+        var InfoObj=[];
+        var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+        var centerCords={
+            lat:39.9522,
+            lng:-75.1932
+        };
+
+        var icons={
+            event:{
+                icon:'https://www.pradipdebnath.com/wp-content/uploads/2019/12/map-marker-icon.png'
+            },
+        };
+
+        var markersOnMap =[
+            {
+                placeName: 'Allegheny College',
+                pageName: "firstUni.html",
+                LatLng: [{
+                    lat:41.6485, lng:-80.1455
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Bryn Mawr College',
+                pageName: "secondUni.html",
+                LatLng: [{
+                    lat:40.0279, lng:-75.3145
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Bucknell University',
+                pageName: "thirdUni.html",
+                LatLng: [{
+                    lat:40.9548, lng:-76.8851
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Carnegie Mellon University',
+                pageName: "fourthUni.html",
+                LatLng: [{
+                    lat:40.4427, lng:-79.9430
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Dickinson College',
+                pageName: "fifthUni.html",
+                LatLng: [{
+                    lat:40.2027, lng:-77.2008
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Drexel University',
+                pageName: "sixthUni.html",
+                LatLng: [{
+                    lat:39.9566, lng:-75.1899
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Franklin & Marshall College',
+                pageName: "seventhUni.html",
+                LatLng: [{
+                    lat:40.0502, lng:-76.3178
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Gettysburg College',
+                pageName: "eighthUni.html",
+                LatLng: [{
+                    lat:39.8357, lng:-77.2356
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Haverford College',
+                pageName: "nineUni.html",
+                LatLng: [{
+                    lat:40.0093, lng:-75.3077
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Juniata College',
+                pageName: "tenUni.html",
+                LatLng: [{
+                    lat:40.5001, lng:-78.0159
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Lafayette College',
+                pageName: "elevenUni.html",
+                LatLng: [{
+                    lat:40.6983, lng:-75.2097
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Lehigh University',
+                pageName: "twelveUni.html",
+                LatLng: [{
+                    lat:40.6049, lng:-75.3775
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Muhlenberg College ',
+                pageName: "thirteenUni.html",
+                LatLng: [{
+                    lat:40.5975, lng:-75.5101
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'University of Pennsylvania',
+                pageName: "fourteenUni.html",
+                LatLng: [{
+                    lat:39.9522, lng:-75.1932
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Penn State University',
+                pageName: "fifteenUni.html",
+                LatLng: [{
+                    lat:40.7982, lng:-77.8599
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'University of Pittsburgh',
+                pageName: "sixteenUni.html",
+                LatLng: [{
+                    lat:40.4444, lng:-79.9608
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Susquehanna University',
+                pageName: "seventeenUni.html",
+                LatLng: [{
+                    lat:40.7961, lng:-76.8774
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Swarthmore College',
+                pageName: "eighteenUni.html",
+                LatLng: [{
+                    lat:39.9038, lng:-75.3527
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Ursinus College',
+                pageName: "nineteenUni.html",
+                LatLng: [{
+                    lat:40.1940, lng:-75.4563
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Villanova University',
+                pageName: "twentyUni.html",
+                LatLng: [{
+                    lat:40.0369, lng:-75.3426
+                }],
+                type:'event'
+            },
+            {
+                placeName: 'Washington & Jefferson College',
+                pageName: "twentyOneUni.html",
+                LatLng: [{
+                    lat:40.1706, lng:-80.2403
+                }],
+                type:'event'
+            }
+        ];
+        windows.onload=function(){
+            initMap();
+        };
+
+        function addMarkerInfo(){
+            for (var i=0;i<markersOnMap.length;i++) {
+                var contentString='<h3>'+markersOnMap[i].placeName+'</h3>'+'<button class="main__btn"><a href='+markersOnMap[i].pageName+'>More Info</a></button>';
+
+                const marker=new google.maps.Marker({
+                    position:markersOnMap[i].LatLng[0],
+                    icon:icons[markersOnMap[i].type].icon,
+                    map:map
+                });
+
+                const infowindow=new google.maps.InfoWindow({
+                    content:contentString,
+                });
+
+                marker.addListener('click',function() {
+                    closeOtherInfo();
+                    infowindow.open(map,marker);
+                    InfoObj[0]=infowindow;
+                });
+            }
+        }
+
+        function closeOtherInfo(){
+            if (InfoObj.length>0){
+                InfoObj[0].set("marker",null);
+                InfoObj[0].close();
+                InfoObj[0].length=0;
+            }
+        }
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"),{
+                zoom:8.5,
+                center: centerCords
+            });
+            addMarkerInfo();
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-OABpnyG3-PSv288lxYCY62eKdPdt4Kk&callback=initMap" ></script>
+  </body>
+</html>
